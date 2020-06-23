@@ -11,23 +11,17 @@ import {
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import ImageElement from './src/ImageElement';
-import mainStore from './src/screeens/main/MainStore';
+import mainStore from './src/screens/main/MainStore';
+import ImageElement from './src/screens/ImageElement';
+import {observer} from 'mobx-react';
 
+@observer
 class Example extends Component {
-  // constructor() {
-  //     super()
-  //     this.state = {
-  //         isLoading: true,
-  //         dataSource: []
-  //     }
-  // }
-
   renderItem = ({item}) => {
     return (
       <TouchableWithoutFeedback
         onPress={() => this.press(item)}
-        style={{flex: 1, flexDirection: 'column'}}>
+        style={styles.element}>
         <View>
           <Image style={styles.image} source={{uri: item.thumbnailUrl}} />
         </View>
@@ -39,24 +33,17 @@ class Example extends Component {
   };
   componentDidMount() {
     mainStore.loadPhotos();
-
-    // networkService("photos")
-    //      .then((responseJson) => {
-    //          this.setState({
-    //              dataSource: responseJson,
-    //              isLoading: false
-    //          })
-    //      })
-    //      .catch((error) => {
-    //          console.log(error)
-    //      })
   }
 
   render() {
     if (mainStore.loader) {
       return (
         <View style={styles.container}>
-          <ActivityIndicator />
+          <ActivityIndicator
+            size="large"
+            color="#000000"
+            style={styles.indicator}
+          />
         </View>
       );
     } else {
@@ -91,11 +78,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: 'black',
+    backgroundColor: 'white',
+  },
+  element: {
+    flex: 1,
+    flexDirection: 'column',
+  },
+  indicator: {
+    flex: 1,
   },
 
   image: {
-    height: Dimensions.get('window').height / 2.5,
+    margin: 2,
+    height: Dimensions.get('window').height / 3,
     width: Dimensions.get('window').width / 2,
   },
 });
